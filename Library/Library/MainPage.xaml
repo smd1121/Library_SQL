@@ -1,0 +1,59 @@
+﻿<Page
+    x:Class="Library.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Library"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <NavigationView x:Name="NavView"
+                         Loaded="NavView_Loaded"
+                         ItemInvoked="NavView_ItemInvoked"
+                         BackRequested="NavView_BackRequested" 
+                         IsSettingsVisible="False"
+                         IsBackButtonVisible="0"
+                         Margin="0,0,0,0" FontFamily="Segoe MDL2 Assets"
+                         >
+            <NavigationView.MenuItems>
+                <NavigationViewItem Tag="account" Icon="Contact" Content="管理员登录" HorizontalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontWeight="Normal"/>
+                <NavigationViewItemSeparator HorizontalAlignment="Stretch" Margin="5,5,0,0" VerticalAlignment="Stretch"/>
+                <NavigationViewItem Tag="apps" Content="图书入库" FontFamily="Segoe UI">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECCD;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="games" Content="图书查询" FontFamily="Segoe UI">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF78B;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="借书">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEBE7;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="还书">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC52;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="借书证管理" FontFamily="Segoe UI">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE716;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+                
+
+
+            <ScrollViewer>
+                <Frame x:Name="ContentFrame" Padding="0,0,12,24" IsTabStop="True"
+                   NavigationFailed="ContentFrame_NavigationFailed"/>
+            </ScrollViewer>
+        </NavigationView>
+    </Grid>
+</Page>
