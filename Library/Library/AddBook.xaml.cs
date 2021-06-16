@@ -12,29 +12,25 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System.Data.SqlClient;
-using System.Collections.ObjectModel;
 
-// https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
+// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
 namespace Library
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class AddBook : Page
     {
-        public MainPage()
+        public AddBook()
         {
             this.InitializeComponent();
         }
 
-        private void AdminLogin_AccessKeyInvoked(UIElement sender, AccessKeyInvokedEventArgs args)
+        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-            Title.Text = "Admin Login";
-        }
 
+        }
         public void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             //Title.Text = args.InvokedItem.ToString();
@@ -78,53 +74,12 @@ namespace Library
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
-            if ((App.Current as App).isLoggedIn)
-                this.Frame.Navigate(typeof(AdminStatus));
-            NavView.SelectedItem = NavView.MenuItems[0];
+            NavView.SelectedItem = NavView.MenuItems[2];
         }
 
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
 
-        }
-
-        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            string GetAdmin = "select name from admin where adminID = '"
-                              + AdminID.Text + "' and password = '"
-                              + passwordBox.Password + "';";
-            using (SqlConnection conn = new SqlConnection((App.Current as App).ConnectionString))
-            {
-                conn.Open();
-                if (conn.State == System.Data.ConnectionState.Open)
-                {
-                    using (SqlCommand cmd = conn.CreateCommand())
-                    {
-                        cmd.CommandText = GetAdmin;
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                (App.Current as App).adminName = reader[0].ToString();
-                                (App.Current as App).isLoggedIn = true;
-                                this.Frame.Navigate(typeof(AdminStatus));
-                                LoginTip.Text = "欢迎管理员 " + (App.Current as App).adminName;
-                                return;
-                            }
-                            else
-                            {
-                                LoginTip.Text = "管理员 ID 或密码错误。";
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

@@ -22,6 +22,18 @@ namespace Library
     /// </summary>
     sealed partial class App : Application
     {
+        public bool isLoggedIn = false;
+        public string adminName = "";
+
+        private string connectionString =
+        "Data Source=INSR\\SFXUAN;Initial Catalog=LibraryManager;Integrated Security=SSPI";
+
+        // This is an example connection string for using SQL Server Authentication.
+        // private string connectionString =
+        //     @"Data Source=YourServerName\YourInstanceName;Initial Catalog=DatabaseName; User Id=XXXXX; Password=XXXXX";
+
+        public string ConnectionString { get => connectionString; set => connectionString = value; }
+
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
