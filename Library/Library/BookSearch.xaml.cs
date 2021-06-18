@@ -61,19 +61,56 @@ namespace Library
         }
     }
 
+
+
     public sealed partial class BookSearch : Page
     {
         public BookSearch()
         {
             this.InitializeComponent();
-            InventoryList.ItemsSource = GetBooks((App.Current as App).ConnectionString);
+            InventoryList.ItemsSource = GetBooks((App.Current as App).ConnectionString, "select * from books");
+            bookTypes = GetBookTypes((App.Current as App).ConnectionString);
         }
 
-        public ObservableCollection<BookRecord> GetBooks(string connectionString)
-        {
-            const string GetProductsQuery = "select *" +
-               " from books";
+        ObservableCollection<string> bookTypes;
 
+        public ObservableCollection<string> GetBookTypes(string connectionString)
+        {
+            var bookTypeRec = new ObservableCollection<string>();
+            string GetBookTypeQuery = "select distinct type from books";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    if (conn.State == System.Data.ConnectionState.Open)
+                    {
+                        using (SqlCommand cmd = conn.CreateCommand())
+                        {
+                            cmd.CommandText = GetBookTypeQuery;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    if (!reader.IsDBNull(0))
+                                        bookTypeRec.Add(reader[0].ToString());
+                                }
+                            }
+                        }
+                    }
+                }
+                bookTypeRec.Add("");
+                return bookTypeRec;
+            }
+            catch (Exception eSql)
+            {
+                App.DisplaySqlError(eSql);
+                return null;
+            }
+        }
+
+        public ObservableCollection<BookRecord> GetBooks(string connectionString, string GetBooksQuery)
+        {
             var bookRecords = new ObservableCollection<BookRecord>();
             try
             {
@@ -84,7 +121,7 @@ namespace Library
                     {
                         using (SqlCommand cmd = conn.CreateCommand())
                         {
-                            cmd.CommandText = GetProductsQuery;
+                            cmd.CommandText = GetBooksQuery;
                             using (SqlDataReader reader = cmd.ExecuteReader())
                             {
                                 while (reader.Read())
@@ -109,9 +146,9 @@ namespace Library
             }
             catch (Exception eSql)
             {
-                throw eSql;
+                App.DisplaySqlError(eSql);
+                return null;
             }
-            return null;
         }
 
         public void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -157,7 +194,7 @@ namespace Library
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
-            NavView.SelectedItem = NavView.MenuItems[0];
+            NavView.SelectedItem = NavView.MenuItems[3];
         }
 
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
@@ -170,9 +207,65 @@ namespace Library
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SearchBooks(object sender, RoutedEventArgs e)
         {
+            string query = "select * from books";
+            bool hasCondition = false;
+            if (searchOnlyHave.IsChecked == true)
+            {
+                query += hasCondition ? " and" : " where";
+                query += " storageNum > 0";
+                hasCondition = true;
+            }
+            if (SearchBookID.Text != "")
+            {
+                query += hasCondition ? " and" : " where";
+                query += " bookID = '" + SearchBookID.Text + "'";
+                hasCondition = true;
+            }
+            if (SearchType.SelectedValue != null && SearchType.SelectedValue.ToString().Length != 0)
+            {
+                query += hasCondition ? " and" : " where";
+                query += " type = '" + SearchType.SelectedValue.ToString() + "'";
+                hasCondition = true;
+            }
+            if (SearchBookName.Text != "")
+            {
+                query += hasCondition ? " and" : " where";
+                query += " bookName like '" + SearchBookName.Text + "'";
+                hasCondition = true;
+            }
 
+            ObservableCollection<BookRecord> bookRec = GetBooks((App.Current as App).ConnectionString, query);
+            bookTypes = GetBookTypes((App.Current as App).ConnectionString);
+            if (SearchSorting.SelectedValue != null)
+                switch (SearchSorting.SelectedValue.ToString())
+                {
+                    case "图书编号":
+                        InventoryList.ItemsSource =
+                            new ObservableCollection<BookRecord>
+                                (bookRec.OrderBy(item => item.BookID));
+                        break;
+                    case "单价":
+                        InventoryList.ItemsSource =
+                            new ObservableCollection<BookRecord>
+                                (bookRec.OrderBy(item => item.Price));
+                        break;
+                    case "出版年份":
+                        InventoryList.ItemsSource =
+                            new ObservableCollection<BookRecord>
+                                (bookRec.OrderBy(item => item.publishYear));
+                        break;
+                    case "存量":
+                        InventoryList.ItemsSource =
+                            new ObservableCollection<BookRecord>
+                                (bookRec.OrderBy(item => item.StorageNum));
+                        break;
+                }
+            else
+            {
+                InventoryList.ItemsSource = bookRec;
+            }
         }
     }
 }

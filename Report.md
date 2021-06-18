@@ -47,7 +47,9 @@ create table records
     due			datetime,
     agentID		int not null,
     primary key (recordID),
-    foreign key (cardID) references cards,
+    foreign key (cardID) references cards
+    	on delete cascade
+        on update cascade,
     foreign key (bookID) references books,
     foreign key (agentID) references admin
 );
@@ -64,6 +66,12 @@ use LibraryManager;
 
 insert into admin
 	values (1, 'admin1', 'XYX', '15029757365'), (123, 'lc', 'LC', '0');
+	
+insert into books
+	values (4, '计算机', '计算机系统概论', null, 2010, null, 120.5, 5, 0)
+	
+insert into records
+	values (0, 0, 1, GETDATE(), DATEADD(DAY, 31, GETDATE()), 1)
 ```
 
 
@@ -141,3 +149,186 @@ insert into admin
         </NavigationView>
 ```
 
+### 管理员登录
+
+密码错误的提示：
+
+<img src="Report.assets/image-20210618150509917.png" alt="image-20210618150509917" style="zoom: 33%;" />
+
+密码正确则显示已登录：
+
+<img src="Report.assets/image-20210618150547682.png" alt="image-20210618150547682" style="zoom:33%;" />
+
+
+
+### 图书入库
+
+#### 单本入库
+
+**模式 1：为已存在书目增加数量**
+
+<img src="Report.assets/image-20210618150710087.png" alt="image-20210618150710087" style="zoom:33%;" />
+
+执行前后的数据库：
+
+![image-20210618150726669](Report.assets/image-20210618150726669.png)
+
+![image-20210618150742937](Report.assets/image-20210618150742937.png)
+
+
+
+**模式 2：增加新的书目**
+
+![image-20210618150959032](Report.assets/image-20210618150959032.png)
+
+![image-20210618151022207](Report.assets/image-20210618151022207.png)
+
+
+
+当出现不合法的输入时，弹窗进行提示：
+
+<img src="Report.assets/image-20210618151118456.png" alt="image-20210618151118456" style="zoom: 80%;" />![image-20210618151155500](Report.assets/image-20210618151155500.png)
+
+<img src="Report.assets/image-20210618151206238.png" alt="image-20210618151206238" style="zoom:80%;" />
+
+
+
+#### 批量导入
+
+单击选择文件，进入文件选区，选择文件后进行添加
+
+![image-20210618151241721](Report.assets/image-20210618151241721.png)
+
+添加成功后出现成功提示：
+
+![image-20210618151302004](Report.assets/image-20210618151302004.png)
+
+示例文件：
+
+```
+(111, 计算机, 计算机组成, xxx, 2004, xxx, 90.00, 2 )
+(112, 计算机, Computer, xxx, 2004, xxx, 90.00, 5 )
+(113, 计算机, Computer, null, 2020, 123, 15.10, 10)
+(112, 计算机, Computer, xxx, 2004, xxx, 90.00, 5 )
+(0, null, null, null, null, null, null, 5)
+```
+
+添加前：
+
+![image-20210618151356208](Report.assets/image-20210618151356208.png)
+
+添加后：
+
+![image-20210618151423617](Report.assets/image-20210618151423617.png)
+
+注意，文件中第 5 行使得 bookID 为 0 的数目增加了 5 本。
+
+
+
+### 图书查询
+
+#### 图书查询界面
+
+![image-20210618151517631](Report.assets/image-20210618151517631.png)
+
+#### 按书号查询
+
+![image-20210618151543733](Report.assets/image-20210618151543733.png)
+
+#### 按书名模糊查询
+
+![image-20210618151624269](Report.assets/image-20210618151624269.png)
+
+#### 复合查询
+
+![image-20210618151651347](Report.assets/image-20210618151651347.png)
+
+![image-20210618151613412](Report.assets/image-20210618151613412.png)
+
+#### 将查询结果进行排列
+
+![image-20210618151739959](Report.assets/image-20210618151739959.png)
+
+![image-20210618151758003](Report.assets/image-20210618151758003.png)
+
+
+
+### 借书
+
+![image-20210618151937153](Report.assets/image-20210618151937153.png)
+
+借书采用了和图书查询界面一样的查询功能，并增加了借阅功能。
+
+
+
+输入借阅书号和借书证号，点击借阅，成功则提示：
+
+<img src="Report.assets/image-20210618152007893.png" alt="image-20210618152007893" style="zoom:67%;" />
+
+随即刷新图书列表。
+
+
+
+当所借阅的图书没有库存时，提示：
+
+<img src="Report.assets/image-20210618152118373.png" alt="image-20210618152118373" style="zoom:67%;" />
+
+当所借阅的图书不存在时，提示：
+
+<img src="Report.assets/image-20210618152138972.png" alt="image-20210618152138972" style="zoom:67%;" />
+
+其他错误提示（部分）：
+
+<img src="Report.assets/image-20210618152205064.png" alt="image-20210618152205064" style="zoom:67%;" />
+
+<img src="Report.assets/image-20210618152215376.png" alt="image-20210618152215376" style="zoom:67%;" />
+
+借书记录将更新在 records 表中，并可以在还书、借书证管理模块进行查看。
+
+
+
+### 还书
+
+还书界面：
+
+![image-20210618152311445](Report.assets/image-20210618152311445.png)
+
+输入借书证号点击查询，可以看到对应的借书记录：
+
+![image-20210618152428107](Report.assets/image-20210618152428107.png)
+
+输入对应图书编号可以进行还书：
+
+![image-20210618152449791](Report.assets/image-20210618152449791.png)
+
+提示还书成功，同时 **只删除一条对应的还书记录**。
+
+
+
+一些错误提示：
+
+<img src="Report.assets/image-20210618152523311.png" alt="image-20210618152523311" style="zoom: 67%;" />![image-20210618152540213](Report.assets/image-20210618152540213.png)
+
+<img src="Report.assets/image-20210618152523311.png" alt="image-20210618152523311" style="zoom: 67%;" />![image-20210618152540213](Report.assets/image-20210618152540213.png)
+
+
+
+### 借书证管理
+
+#### 注册借书证
+
+输入信息后，进行注册并提示借书证编号：
+
+![image-20210618152631641](Report.assets/image-20210618152631641.png)
+
+
+
+#### 注销借书证
+
+输入借书证编号进行注销：
+
+![image-20210618152652895](Report.assets/image-20210618152652895.png)
+
+**如果仍有未归还记录，不能注销：**
+
+![image-20210618152727546](Report.assets/image-20210618152727546.png)

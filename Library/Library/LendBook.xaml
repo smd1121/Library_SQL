@@ -15,7 +15,7 @@
                          BackRequested="NavView_BackRequested" 
                          IsSettingsVisible="False"
                          IsBackButtonVisible="0"
-                         Margin="0,0,0,0" FontFamily="Segoe UI"
+                         Margin="0,0,0,0" FontFamily="Segoe MDL2 Assets"
                          >
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="AdminLogin" Tag="account" Icon="Contact" Content="管理员登录" HorizontalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontWeight="Normal"/>
@@ -25,7 +25,7 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECCD;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="BookSearch" Tag="games" Content="图书查询" FontFamily="Segoe UI">
+                <NavigationViewItem x:Name="BookSearchButton" Tag="games" Content="图书查询" FontFamily="Segoe UI">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF78B;"/>
                     </NavigationViewItem.Icon>
@@ -54,6 +54,122 @@
                                VerticalAlignment="Top" Margin="100,70,0,0" 
                                Height="35" Width="229" FontSize="24" 
                                FontWeight="Bold" FontFamily="Segoe UI"/>
+
+                    <StackPanel>
+                        <RelativePanel>
+                        <StackPanel x:Name="column1">
+                            <TextBox x:Name="SearchBookID" Width="200" 
+                                     Header="书号" 
+                                     PlaceholderText="（可选）请键入书号" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,120,0,0"/>
+                            <TextBox x:Name="SearchBookName" Width="200" 
+                                     Header="书名" 
+                                     PlaceholderText="（可选）请输入书名"
+                                     Margin="100,10,0,0" 
+                                     HorizontalAlignment="Left" 
+                                     VerticalAlignment="Stretch"/>
+                        </StackPanel>
+                        <StackPanel x:Name="column2" RelativePanel.RightOf="column1">
+                                <ComboBox x:Name="SearchType" Width="200" 
+                                          Margin="100,120,0,0" Header="类别" 
+                                          PlaceholderText="（可选）请选择类别"
+                                          ItemsSource="{x:Bind bookTypes}" 
+                                          HorizontalAlignment="Left" 
+                                          VerticalAlignment="Stretch"/>
+                                <ComboBox x:Name="SearchSorting" Header="排序依据" 
+                                          PlaceholderText="（可选）请选择排序依据"
+                                          Margin="100,10,0,0" Width="200">
+                                    <x:String>图书编号</x:String>
+                                    <x:String>单价</x:String>
+                                    <x:String>出版年份</x:String>
+                                    <x:String>存量</x:String>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel x:Name="column3" RelativePanel.RightOf="column2">
+                                <CheckBox x:Name="searchOnlyHave" 
+                                          Margin="100,140,0,0" 
+                                          Content="只显示有存量图书"/>
+                                <Button Content="查询" HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top" Click="SearchBooks" 
+                                        Margin="150,30,0,0"/>
+
+                            </StackPanel>
+                        </RelativePanel>
+                        <RelativePanel>
+                            <StackPanel x:Name="l2c1">
+                                <TextBox x:Name="LendBookID" Width="200" 
+                                     Header="借阅书号" 
+                                     PlaceholderText="请键入借阅书号" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,30,0,0"/>
+                            </StackPanel>
+                            <StackPanel x:Name="l2c2" RelativePanel.RightOf="l2c1">
+                                <TextBox x:Name="LendCardID" Width="200" 
+                                     Header="借书证号" 
+                                     PlaceholderText="请输入借书证号"
+                                     Margin="100,30,0,0" 
+                                     HorizontalAlignment="Left" 
+                                     VerticalAlignment="Stretch"/>
+                            </StackPanel>
+                            <StackPanel x:Name="l2c3" RelativePanel.RightOf="l2c2">
+                                <Button x:Name="LendButton" Content="借阅" HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top" Click="LendBooks" 
+                                        Margin="150,50,0,0"/>
+                            </StackPanel>
+                        </RelativePanel>
+                        <ListView Name="InventoryList"
+                          SelectionMode="Single"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.IsVerticalRailEnabled="True"
+                          ScrollViewer.VerticalScrollMode="Enabled"
+                          ScrollViewer.HorizontalScrollMode="Enabled"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          ScrollViewer.IsHorizontalRailEnabled="True"
+                          Margin="20,20,20,20" HorizontalAlignment="Stretch">
+                        <ListView.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"  >
+                                    <TextBlock Text="图书编号" Width="100" Foreground="DarkRed" FontFamily="Segoe UI" />
+                                    <TextBlock Text="分类" Width="100" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                    <TextBlock Text="书名" Width="200" Foreground="DarkRed" FontFamily="Segoe UI" />
+                                    <TextBlock Text="出版社" Width="200" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                    <TextBlock Text="出版年份" Width="72" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                    <TextBlock Text="作者" Width="120" Foreground="DarkRed" FontFamily="Segoe UI" />
+                                    <TextBlock Text="单价" Width="50" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                    <TextBlock Text="总量" Width="50" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                    <TextBlock Text="存量" Width="50" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.HeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:BookRecord">
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock Name="BookID"
+                                    Text="{x:Bind BookID}"
+                                    Width="90" />
+                                    <TextBlock Name="BookType"
+                                    Text="{x:Bind Type}"
+                                    Width="100" />
+                                    <TextBlock Text="{x:Bind BookName}"
+                                   Width="200" />
+                                    <TextBlock Text="{x:Bind Publisher}"
+                                   Width="200" />
+                                    <TextBlock Text="{x:Bind publishYearString}"
+                                   Width="72" />
+                                    <TextBlock Text="{x:Bind Author}"
+                                   Width="120" />
+                                    <TextBlock Text="{x:Bind PriceString}"
+                                   Width="50" />
+                                    <TextBlock Text="{x:Bind TotalNum}"
+                                   Width="50" />
+                                    <TextBlock Text="{x:Bind StorageNum}"
+                                   Width="50" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    </StackPanel>
                 </Grid>
             </ScrollViewer>
         </NavigationView>

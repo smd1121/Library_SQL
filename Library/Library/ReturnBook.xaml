@@ -15,7 +15,7 @@
                          BackRequested="NavView_BackRequested" 
                          IsSettingsVisible="False"
                          IsBackButtonVisible="0"
-                         Margin="0,0,0,0" FontFamily="Segoe UI"
+                         Margin="0,0,0,0" FontFamily="Segoe MDL2 Assets"
                          >
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="AdminLogin" Tag="account" Icon="Contact" Content="管理员登录" HorizontalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontWeight="Normal"/>
@@ -25,7 +25,7 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECCD;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="BookSearch" Tag="games" Content="图书查询" FontFamily="Segoe UI">
+                <NavigationViewItem x:Name="BookSearchButton" Tag="games" Content="图书查询" FontFamily="Segoe UI">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF78B;"/>
                     </NavigationViewItem.Icon>
@@ -47,13 +47,87 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
 
-            <ScrollViewer>
+            <ScrollViewer HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch">
                 <Grid x:Name="ContentFrame" Padding="0,0,12,24">
                     <TextBlock x:Name="Title" HorizontalAlignment="Left" 
                                Text="还书" TextWrapping="Wrap" 
                                VerticalAlignment="Top" Margin="100,70,0,0" 
                                Height="35" Width="229" FontSize="24" 
                                FontWeight="Bold" FontFamily="Segoe UI"/>
+
+                    <StackPanel>
+                        <RelativePanel>
+                            <StackPanel x:Name="column1">
+                                <TextBox x:Name="ReturnCardID" Width="200" 
+                                     Header="借阅证号" 
+                                     PlaceholderText="请键入借阅证号" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,120,0,0"/>
+                                <TextBox x:Name="ReturnBookID" Width="200" 
+                                     Header="图书编号" 
+                                     PlaceholderText="请键入图书编号"
+                                     Margin="100,10,0,0" 
+                                     HorizontalAlignment="Left" 
+                                     VerticalAlignment="Stretch"/>
+                            </StackPanel>
+                            <StackPanel x:Name="column3" RelativePanel.RightOf="column1">
+                                <Button Content="查询" HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top" Click="SearchRecordsButton" 
+                                        Margin="150,142,0,0"/>
+                                <Button Content="还书" HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top" Click="ReturnBookButton" 
+                                        Margin="150,32,0,0"/>
+
+                            </StackPanel>
+                        </RelativePanel>
+                        <TextBlock HorizontalAlignment="Left" 
+                               Text="借阅记录" TextWrapping="Wrap" 
+                               VerticalAlignment="Top" Margin="100,20,0,0" 
+                               Height="35" Width="229" FontSize="22" 
+                               FontFamily="Segoe UI"/>
+                        <ListView Name="RecordList"
+                          SelectionMode="Single"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.IsVerticalRailEnabled="True"
+                          ScrollViewer.VerticalScrollMode="Enabled"
+                          ScrollViewer.HorizontalScrollMode="Enabled"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          ScrollViewer.IsHorizontalRailEnabled="True"
+                          Margin="100,10,20,20" HorizontalAlignment="Stretch">
+                            <ListView.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal"  >
+                                        <TextBlock Text="图书编号" Width="100" Foreground="DarkRed" FontFamily="Segoe UI" />
+                                        <TextBlock Text="书名" Width="200" Foreground="DarkRed" FontFamily="Segoe UI" />
+                                        <TextBlock Text="借阅证号" Width="100" Foreground="DarkRed" FontFamily="Segoe UI" />
+                                        <TextBlock Text="借阅人" Width="120" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                        <TextBlock Text="借阅时间" Width="160" Foreground="DarkRed" FontFamily="Segoe UI"/>
+                                        <TextBlock Text="经手人" Width="120" Foreground="DarkRed" FontFamily="Segoe UI" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.HeaderTemplate>
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="local:LendRecord">
+                                    <StackPanel Orientation="Horizontal" >
+                                        <TextBlock Name="BookID"
+                                    Text="{x:Bind BookIDRec}"
+                                    Width="90" />
+                                        <TextBlock Name="BookType"
+                                    Text="{x:Bind BookNameRec}"
+                                    Width="200" />
+                                        <TextBlock Text="{x:Bind CardIDRec}"
+                                   Width="100" />
+                                        <TextBlock Text="{x:Bind BorrowerRec}"
+                                   Width="120" />
+                                        <TextBlock Text="{x:Bind BorrowTimeRec}"
+                                   Width="160" />
+                                        <TextBlock Text="{x:Bind AgentIDRec}"
+                                   Width="120" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
                 </Grid>
             </ScrollViewer>
         </NavigationView>

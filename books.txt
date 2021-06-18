@@ -1,0 +1,5 @@
+(11, Computer Science, Computer Architecture, xxx, 2004, xxx, 90.00, 2 )
+(12, Computer Science, Computer, xxx, 2004, xxx, 90.00, 5 )
+(13, Computer Science, Computer, null, 2020, 123, 15.10, 10)
+(12, Computer Science, Computer, xxx, 2004, xxx, 90.00, 5 )
+(0, null, null, null, null, null, null, 5)

@@ -17,43 +17,111 @@
                          IsBackButtonVisible="0"
                          Margin="0,0,0,0" FontFamily="Segoe MDL2 Assets"
                          >
-        <NavigationView.MenuItems>
-            <NavigationViewItem x:Name="AdminLogin" Tag="account" Icon="Contact" Content="管理员登录" HorizontalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontWeight="Normal"/>
-            <NavigationViewItemSeparator HorizontalAlignment="Stretch" Margin="5,5,0,0" VerticalAlignment="Stretch"/>
-            <NavigationViewItem x:Name="BookNew" Tag="apps" Content="图书入库" FontFamily="Segoe UI">
-                <NavigationViewItem.Icon>
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECCD;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem x:Name="BookSearch" Tag="games" Content="图书查询" FontFamily="Segoe UI">
-                <NavigationViewItem.Icon>
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF78B;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem x:Name="Borrow" Content="借书">
-                <NavigationViewItem.Icon>
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEBE7;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem x:Name="Return" Content="还书">
-                <NavigationViewItem.Icon>
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC52;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="AdminLogin" Tag="account" Icon="Contact" Content="管理员登录" HorizontalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontWeight="Normal"/>
+                <NavigationViewItemSeparator HorizontalAlignment="Stretch" Margin="5,5,0,0" VerticalAlignment="Stretch"/>
+                <NavigationViewItem x:Name="BookNew" Tag="apps" Content="图书入库" FontFamily="Segoe UI">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECCD;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="BookSearchButton" Tag="games" Content="图书查询" FontFamily="Segoe UI">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF78B;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="Borrow" Content="借书">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEBE7;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="Return" Content="还书">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC52;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem x:Name="CardManageItem" Content="借书证管理" FontFamily="Segoe UI">
-                <NavigationViewItem.Icon>
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE716;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-        </NavigationView.MenuItems>
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE716;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
 
-        <ScrollViewer>
-            <Frame x:Name="ContentFrame" Padding="0,0,12,24" IsTabStop="True"
-                   FontFamily="Segoe UI">
-            </Frame>
-        </ScrollViewer>
+            <ScrollViewer HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" FontFamily="Segoe UI">
+                <Grid x:Name="ContentFrame" Padding="0,0,12,24">
+                    <TextBlock x:Name="Title" HorizontalAlignment="Left" 
+                               Text="图书入库" TextWrapping="Wrap" 
+                               VerticalAlignment="Top" Margin="100,70,0,0" 
+                               Height="35" Width="229" FontSize="24" 
+                               FontWeight="Bold" FontFamily="Segoe UI"/>
+                    <StackPanel>
+                        <TextBlock x:Name="title1" HorizontalAlignment="Left" 
+                               Text="单本入库" TextWrapping="Wrap" 
+                               VerticalAlignment="Top" Margin="100,120,0,0" 
+                               Height="35" Width="229" FontSize="22" 
+                               FontFamily="Segoe UI"/>
+                        <RelativePanel>
+                            <StackPanel x:Name="Regcolumn1">
+                                <TextBox x:Name="AddID" Width="200" 
+                                     Header="书号" 
+                                     PlaceholderText="书号" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                                <TextBox x:Name="AddType" Width="200" 
+                                     Header="类别" 
+                                     PlaceholderText="类别" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                                <TextBox x:Name="AddName" Width="200" 
+                                     Header="书名" 
+                                     PlaceholderText="书名" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                                <TextBox x:Name="AddPublisher" Width="200" 
+                                     Header="出版社" 
+                                     PlaceholderText="出版社" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                                <Button Content="入库" HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top" Click="AddOneBook" 
+                                        Margin="100,20,0,0"/>
+                            </StackPanel>
+                            <StackPanel x:Name="Regcolumn2" RelativePanel.RightOf="Regcolumn1">
+                                <TextBox x:Name="AddYear" Width="200" 
+                                     Header="出版年份" 
+                                     PlaceholderText="出版年份" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                                <TextBox x:Name="AddAuthor" Width="200" 
+                                     Header="作者" 
+                                     PlaceholderText="作者" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                                <TextBox x:Name="AddPrice" Width="200" 
+                                     Header="价格" 
+                                     PlaceholderText="价格" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                                <TextBox x:Name="AddNum" Width="200" 
+                                     Header="数量" 
+                                     PlaceholderText="数量" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="100,10,0,0"/>
+                            </StackPanel>
+                        </RelativePanel>
+                        <TextBlock x:Name="title2" HorizontalAlignment="Left" 
+                               Text="批量入库" TextWrapping="Wrap" 
+                               VerticalAlignment="Top" Margin="100,40,0,0" 
+                               Height="35" Width="229" FontSize="22" 
+                               FontFamily="Segoe UI"/>
+                        <StackPanel x:Name="column2" >
+                            <Button Content="选择文件" HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top" Click="AddByFile" 
+                                        Margin="100,20,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
         </NavigationView>
-        <TextBlock x:Name="Title" HorizontalAlignment="Left" Text="图书入库" TextWrapping="Wrap" VerticalAlignment="Top" Margin="377,73,0,0" Height="35" Width="229" FontSize="24" FontWeight="Bold" SelectionChanged="TextBlock_SelectionChanged" FontFamily="Segoe UI"/>
-
     </Grid>
 </Page>

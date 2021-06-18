@@ -24,6 +24,7 @@ namespace Library
     {
         public bool isLoggedIn = false;
         public string adminName = "";
+        public int adminID = -1;
 
         private string connectionString =
         "Data Source=INSR\\SFXUAN;Initial Catalog=LibraryManager;Integrated Security=SSPI";
@@ -31,6 +32,18 @@ namespace Library
         // This is an example connection string for using SQL Server Authentication.
         // private string connectionString =
         //     @"Data Source=YourServerName\YourInstanceName;Initial Catalog=DatabaseName; User Id=XXXXX; Password=XXXXX";
+
+        public static async void DisplaySqlError(Exception eSql)
+        {
+            ContentDialog noWifiDialog = new ContentDialog
+            {
+                Title = "数据库错误",
+                Content = eSql.ToString(),
+                CloseButtonText = "Ok"
+            };
+            
+            ContentDialogResult result = await noWifiDialog.ShowAsync();
+        }
 
         public string ConnectionString { get => connectionString; set => connectionString = value; }
 

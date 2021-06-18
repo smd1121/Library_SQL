@@ -31,8 +31,6 @@ namespace Library
 
         private void AdminLogin_AccessKeyInvoked(UIElement sender, AccessKeyInvokedEventArgs args)
         {
-            throw new NotImplementedException();
-            Title.Text = "Admin Login";
         }
 
         public void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -95,35 +93,43 @@ namespace Library
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string GetAdmin = "select name from admin where adminID = '"
+            string GetAdmin = "select * from admin where adminID = '"
                               + AdminID.Text + "' and password = '"
                               + passwordBox.Password + "';";
-            using (SqlConnection conn = new SqlConnection((App.Current as App).ConnectionString))
+            try
             {
-                conn.Open();
-                if (conn.State == System.Data.ConnectionState.Open)
+                using (SqlConnection conn = new SqlConnection((App.Current as App).ConnectionString))
                 {
-                    using (SqlCommand cmd = conn.CreateCommand())
+                    conn.Open();
+                    if (conn.State == System.Data.ConnectionState.Open)
                     {
-                        cmd.CommandText = GetAdmin;
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqlCommand cmd = conn.CreateCommand())
                         {
-                            if (reader.Read())
+                            cmd.CommandText = GetAdmin;
+                            using (SqlDataReader reader = cmd.ExecuteReader())
                             {
-                                (App.Current as App).adminName = reader[0].ToString();
-                                (App.Current as App).isLoggedIn = true;
-                                this.Frame.Navigate(typeof(AdminStatus));
-                                LoginTip.Text = "欢迎管理员 " + (App.Current as App).adminName;
-                                return;
-                            }
-                            else
-                            {
-                                LoginTip.Text = "管理员 ID 或密码错误。";
-                                return;
+                                if (reader.Read())
+                                {
+                                    (App.Current as App).adminID = reader.GetInt32(0);
+                                    (App.Current as App).adminName = reader[2].ToString();
+                                    (App.Current as App).isLoggedIn = true;
+                                    this.Frame.Navigate(typeof(AdminStatus));
+                                    LoginTip.Text = "欢迎管理员 " + (App.Current as App).adminName;
+                                    return;
+                                }
+                                else
+                                {
+                                    LoginTip.Text = "管理员 ID 或密码错误。";
+                                    return;
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (Exception eSql)
+            {
+                App.DisplaySqlError(eSql);
             }
         }
     }
